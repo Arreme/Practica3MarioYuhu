@@ -34,7 +34,8 @@ public class MarioPlayerController : MonoBehaviour
 
     private void Update()
     {
-        Vector3 movement = Vector3.zero;
+
+        _animator.SetFloat("Speed", _speed);
 
         if (Input.GetKeyDown(_jumpKey) && _grounded)
         {
@@ -76,6 +77,7 @@ public class MarioPlayerController : MonoBehaviour
             movement.Normalize();
             movement *= Time.deltaTime * ((Input.GetKeyDown(KeyCode.LeftShift)) ? _runSpeed : _moveSpeed);
         }
+        transform.rotation = Quaternion.LookRotation(movement,Vector3.up);
         _vSpeed += Physics.gravity.y * Time.deltaTime;
         movement.y += _vSpeed * Time.deltaTime;
         
@@ -94,12 +96,6 @@ public class MarioPlayerController : MonoBehaviour
                 _vSpeed = 0;
             }
             
-        }
-        
-        if (_vSpeed < 0)
-        {
-            Debug.Log(_vSpeed);
-            _animator.SetTrigger("Falling");
         }
         _animator.SetBool("Grounded",_grounded);
 
