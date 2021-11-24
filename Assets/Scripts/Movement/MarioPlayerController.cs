@@ -21,13 +21,15 @@ public class MarioPlayerController : MonoBehaviour
 
     [Header("Jump")]
     [SerializeField] private KeyCode _jumpKey;
-    [SerializeField] private float _speedJump;
     private float _vSpeed = 0;
     private float _startingGravity;
     [SerializeField] private float _height;
     [SerializeField] private float _timeToMaxHeight;
     private float _gravity;
     private float _jumpSpeed;
+    [SerializeField] private float _jumpCooldown;
+    private float _currentJumpTime;
+    private int _nJump;
 
     [Header("Movement")]
     [SerializeField] private Camera _cam;
@@ -40,17 +42,18 @@ public class MarioPlayerController : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _controller = GetComponent<CharacterController>();
-        _currRotation = new Vector3(transform.forward.x,0,transform.forward.z);
         _startingGravity = -2 * _height / (_timeToMaxHeight * _timeToMaxHeight);
         _gravity = _startingGravity;
         _jumpSpeed = 2 * _height / _timeToMaxHeight;
+        _nJump = 0;
+        _currentJumpTime = 0;
     }
 
     private void Update()
     {
 
         _animator.SetFloat("Speed", _animSpeed);
-
+        _currentJumpTime -= Time.deltaTime;
         if (Input.GetKeyDown(_jumpKey) && _grounded)
         {
             Jump();
@@ -60,32 +63,25 @@ public class MarioPlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        _currRotation = new Vector3(transform.forward.x, 0, transform.forward.z);
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
         Vector3 inputDir = new Vector3(input.x, 0, input.y).normalized;
         Vector3 worldInputDir = _cam.transform.TransformDirection(inputDir);
 
         Vector3 _lookTargetDirection = new Vector3(worldInputDir.x, 0, worldInputDir.z).normalized;
-        Vector2 a = new Vector2(_lookTargetDirection.x,_lookTargetDirection.z);
-        Vector2 b = new Vector2(_currRotation.x,_currRotation.z);
-        if (Mathf.Abs(Vector2.SignedAngle(a,b)) >= 150.0f)
-        {
-            _animator.SetTrigger("Turn");
-            transform.rotation = Quaternion.LookRotation(_lookTargetDirection, Vector3.up);
-        } else
-        {
-            _currRotation = Vector3.SmoothDamp(_currRotation, _lookTargetDirection, ref _rSmoothV, _rSmoothTime);
-            if (_currRotation != Vector3.zero)
-                transform.rotation = Quaternion.LookRotation(_currRotation, Vector3.up);
-        }
+        _currRotation = Vector3.SmoothDamp(_currRotation, _lookTargetDirection, ref _rSmoothV, _rSmoothTime);
+        if (_currRotation != Vector3.zero)
+            transform.rotation = Quaternion.LookRotation(_currRotation, Vector3.up);
 
-        float currentSpeed = (Input.GetKey(KeyCode.LeftShift)) ? _moveSpeed : _runSpeed;
+
+        float currentSpeed = (Input.GetKey(KeyCode.LeftShift)) ? _runSpeed : _moveSpeed;
         Vector3 targetVelocity = worldInputDir * currentSpeed;
         _speed = Vector3.SmoothDamp(_speed, targetVelocity, ref smoothV, smoothMoveTime);
 
-        _vSpeed += Physics.gravity.y * Time.deltaTime;
+        _vSpeed += _gravity * Time.deltaTime;
+        _animSpeed = new Vector2(_speed.x, _speed.z).magnitude;
         _speed = new Vector3(_speed.x, _vSpeed, _speed.z);
-
         var cf = _controller.Move(_speed * Time.deltaTime);
         bool onGround = (cf & CollisionFlags.Below) != 0;
         bool onContactCeiling = (cf & CollisionFlags.Above) != 0;
@@ -105,7 +101,7 @@ public class MarioPlayerController : MonoBehaviour
         if (onContactCeiling && _vSpeed > 0.0f) _vSpeed = 0.0f;
         if (_vSpeed < 0.0f)
         {
-            _gravity = _startingGravity * 1.7f;
+            _gravity = _startingGravity * 2f;
         }
 
         _animator.SetBool("Grounded",_grounded);
@@ -114,8 +110,30 @@ public class MarioPlayerController : MonoBehaviour
 
     private void Jump()
     {
-        _vSpeed = _jumpSpeed;
-        _gravity = _startingGravity;
-        _animator.SetTrigger("FirstJump");
+        if (_currentJumpTime > 0 && Input.GetKey(KeyCode.LeftShift))
+        {
+            _nJump++;
+            if (_nJump == 1)
+            {
+                _vSpeed = _jumpSpeed * 1.05f;
+                _gravity = _startingGravity;
+                _animator.SetTrigger("SecondJump");
+                _currentJumpTime = _jumpCooldown;
+            } else
+            {
+                _vSpeed = _jumpSpeed * 1.15f;
+                _gravity = _startingGravity;
+                _animator.SetTrigger("TripleJump");
+                _currentJumpTime = -1;
+                _nJump = 0;
+            }
+        } else
+        {
+            _vSpeed = _jumpSpeed;
+            _gravity = _startingGravity;
+            _animator.SetTrigger("FirstJump");
+            _currentJumpTime = _jumpCooldown;
+        }
+        
     }
 }
