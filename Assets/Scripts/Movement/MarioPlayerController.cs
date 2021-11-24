@@ -65,15 +65,19 @@ public class MarioPlayerController : MonoBehaviour
         Vector3 inputDir = new Vector3(input.x, 0, input.y).normalized;
         Vector3 worldInputDir = _cam.transform.TransformDirection(inputDir);
 
-        Vector3 _lookTargetDirection = new Vector3(worldInputDir.x, 0, worldInputDir.z);
-        if (input != Vector2.zero && Mathf.Abs(Vector3.Dot(_lookTargetDirection, _currRotation)) <= 0.01)
+        Vector3 _lookTargetDirection = new Vector3(worldInputDir.x, 0, worldInputDir.z).normalized;
+        Vector2 a = new Vector2(_lookTargetDirection.x,_lookTargetDirection.z);
+        Vector2 b = new Vector2(_currRotation.x,_currRotation.z);
+        if (Mathf.Abs(Vector2.SignedAngle(a,b)) >= 150.0f)
         {
-            Debug.Log("A");
             _animator.SetTrigger("Turn");
+            transform.rotation = Quaternion.LookRotation(_lookTargetDirection, Vector3.up);
+        } else
+        {
+            _currRotation = Vector3.SmoothDamp(_currRotation, _lookTargetDirection, ref _rSmoothV, _rSmoothTime);
+            if (_currRotation != Vector3.zero)
+                transform.rotation = Quaternion.LookRotation(_currRotation, Vector3.up);
         }
-        _currRotation = Vector3.SmoothDamp(_currRotation, _lookTargetDirection, ref _rSmoothV, _rSmoothTime);
-        if (_currRotation != Vector3.zero)
-            transform.rotation = Quaternion.LookRotation(_currRotation, Vector3.up);
 
         float currentSpeed = (Input.GetKey(KeyCode.LeftShift)) ? _moveSpeed : _runSpeed;
         Vector3 targetVelocity = worldInputDir * currentSpeed;
