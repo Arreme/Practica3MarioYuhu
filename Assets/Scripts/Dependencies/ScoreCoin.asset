@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ce868ea2c834694ab23fc0f42d61156, type: 3}
   m_Name: ScoreCoin
   m_EditorClassIdentifier: 
-  points: 0
+  points: 1

@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class HUD : MonoBehaviour
 {
-    public TextMeshProUGUI score;
+    public Text score;
     private void Start()
     {
         DependencyContainer.GetDependency<IScoreManager>().scoreChangedDelegate += updateScore;
@@ -16,6 +16,6 @@ public class HUD : MonoBehaviour
     }
     public void updateScore(IScoreManager scoreManager)
     {
-        score.text = "Score: " + scoreManager.getPoints().ToString("0");
+        score.text = scoreManager.getPoints().ToString();
     }
 }
