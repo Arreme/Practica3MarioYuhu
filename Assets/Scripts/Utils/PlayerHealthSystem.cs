@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerHealthSystem : MonoBehaviour, IHealthSystem
 {
@@ -9,6 +10,8 @@ public class PlayerHealthSystem : MonoBehaviour, IHealthSystem
     [SerializeField] private float _invTime;
     private bool _isInvincible;
     [SerializeField] private GameObject _model;
+
+    [SerializeField] private UnityEvent<float> _healthChanged;
     private void Start()
     {
         _currLife = _maxLife;
@@ -16,7 +19,7 @@ public class PlayerHealthSystem : MonoBehaviour, IHealthSystem
     public bool GetHit(float dmgAmmount)
     {
         _currLife -= dmgAmmount;
-        Debug.Log("ouch!" + _currLife);
+        _healthChanged.Invoke(_currLife);
         StartCoroutine(InvTimeCoroutine());
         if (_currLife <= 0)
         {
@@ -28,6 +31,7 @@ public class PlayerHealthSystem : MonoBehaviour, IHealthSystem
     public bool Heal(float healAmmount)
     {
         if (_currLife == _maxLife) return false;
+        _healthChanged.Invoke(_currLife);
         _currLife = Mathf.Min(_currLife+healAmmount,_maxLife);
         return true;
     }

@@ -698,6 +698,7 @@ RectTransform:
   - {fileID: 1916983194}
   - {fileID: 2129135200}
   - {fileID: 1312825665}
+  - {fileID: 904880274}
   m_Father: {fileID: 2125195927}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -744,6 +745,41 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 886043543}
   m_CullTransparentMesh: 1
+--- !u!1 &904880273
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 904880274}
+  m_Layer: 5
+  m_Name: UIShown
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &904880274
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 904880273}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 886043544}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 417}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -852,17 +888,6 @@ MonoBehaviour:
   _layers:
     serializedVersion: 2
     m_Bits: 19
---- !u!114 &1063461543 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6126568581739930675, guid: e3f78e2b121b1984aab760396bb26811, type: 3}
-  m_PrefabInstance: {fileID: 6126568581924104665}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2472f031f84dc44cb8f887c25eb8268, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1088984564
 GameObject:
   m_ObjectHideFlags: 0
@@ -1050,6 +1075,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1312825665}
+  - component: {fileID: 1312825666}
   m_Layer: 5
   m_Name: HealthUI
   m_TagString: Untagged
@@ -1076,9 +1102,23 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 417}
+  m_AnchoredPosition: {x: 0, y: 654.4}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1312825666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1312825664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2159baedb4a7934fa91d6d4ff5076c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _healthImage: {fileID: 1147391584}
+  _shown: {fileID: 904880274}
 --- !u!1 &1916983193
 GameObject:
   m_ObjectHideFlags: 0
@@ -1596,42 +1636,6 @@ PrefabInstance:
       propertyPath: _target
       value: 
       objectReference: {fileID: 423053782}
-    - target: {fileID: 6126568582564116726, guid: e3f78e2b121b1984aab760396bb26811, type: 3}
-      propertyPath: _onTriggerStay.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6126568582564116726, guid: e3f78e2b121b1984aab760396bb26811, type: 3}
-      propertyPath: _onTriggerEnter.m_PersistentCalls.m_Calls.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6126568582564116726, guid: e3f78e2b121b1984aab760396bb26811, type: 3}
-      propertyPath: _onTriggerStay.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6126568582564116726, guid: e3f78e2b121b1984aab760396bb26811, type: 3}
-      propertyPath: _onTriggerStay.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1063461543}
-    - target: {fileID: 6126568582564116726, guid: e3f78e2b121b1984aab760396bb26811, type: 3}
-      propertyPath: _onTriggerStay.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6126568582564116726, guid: e3f78e2b121b1984aab760396bb26811, type: 3}
-      propertyPath: _onTriggerStay.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: AttackTrigger_TriggerStayEvent
-      objectReference: {fileID: 0}
-    - target: {fileID: 6126568582564116726, guid: e3f78e2b121b1984aab760396bb26811, type: 3}
-      propertyPath: _onTriggerEnter.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: AttackTrigger_TriggerEnterEvent
-      objectReference: {fileID: 0}
-    - target: {fileID: 6126568582564116726, guid: e3f78e2b121b1984aab760396bb26811, type: 3}
-      propertyPath: _onTriggerStay.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GoombaStateFollow, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 6126568582564116726, guid: e3f78e2b121b1984aab760396bb26811, type: 3}
-      propertyPath: _onTriggerStay.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3f78e2b121b1984aab760396bb26811, type: 3}
 --- !u!1001 &8123290831218077288
@@ -1644,6 +1648,34 @@ PrefabInstance:
     - target: {fileID: 8123290831063890526, guid: bdc9bfd0f3663be4a9cf22b0bb477506, type: 3}
       propertyPath: m_Name
       value: SuperMario
+      objectReference: {fileID: 0}
+    - target: {fileID: 8123290831063890527, guid: bdc9bfd0f3663be4a9cf22b0bb477506, type: 3}
+      propertyPath: _healthChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8123290831063890527, guid: bdc9bfd0f3663be4a9cf22b0bb477506, type: 3}
+      propertyPath: _healthChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8123290831063890527, guid: bdc9bfd0f3663be4a9cf22b0bb477506, type: 3}
+      propertyPath: _healthChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1312825666}
+    - target: {fileID: 8123290831063890527, guid: bdc9bfd0f3663be4a9cf22b0bb477506, type: 3}
+      propertyPath: _healthChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8123290831063890527, guid: bdc9bfd0f3663be4a9cf22b0bb477506, type: 3}
+      propertyPath: _healthChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnHealthChange
+      objectReference: {fileID: 0}
+    - target: {fileID: 8123290831063890527, guid: bdc9bfd0f3663be4a9cf22b0bb477506, type: 3}
+      propertyPath: _healthChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MarioHealth, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8123290831063890527, guid: bdc9bfd0f3663be4a9cf22b0bb477506, type: 3}
+      propertyPath: _healthChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8123290831064377278, guid: bdc9bfd0f3663be4a9cf22b0bb477506, type: 3}
       propertyPath: m_RootOrder
