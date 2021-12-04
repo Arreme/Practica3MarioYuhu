@@ -41,6 +41,14 @@ public class MarioPlayerController : MonoBehaviour
     private int _specialIdleTime = 5;
     private float _currentSpecialIdleTime;
     private bool _resetGame;
+
+    [Header("Punch")]
+    [SerializeField] private KeyCode _punchKey;
+    [SerializeField] private float _punchCooldown;
+    private float _currentPunchTime;
+    private int _nPunch;
+
+
     void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -59,9 +67,16 @@ public class MarioPlayerController : MonoBehaviour
         _animator.SetFloat("Speed", _animSpeed);
         _currentJumpTime -= Time.deltaTime;
         _currentSpecialIdleTime -= Time.deltaTime;
+        _currentPunchTime -= Time.deltaTime;
+
         if (Input.GetKeyDown(_jumpKey) && _grounded)
         {
             Jump();
+            _currentSpecialIdleTime = _specialIdleTime;
+        }
+        if (Input.GetKeyDown(_punchKey) && !Input.GetKey(KeyCode.LeftControl))
+        {
+            Punch();
             _currentSpecialIdleTime = _specialIdleTime;
         }
         
@@ -164,6 +179,29 @@ public class MarioPlayerController : MonoBehaviour
             _currentJumpTime = _jumpCooldown;
         }
         
+    }
+
+    private void Punch()
+    {
+        if(_currentPunchTime > 0)
+        {
+            _nPunch++; 
+            if (_nPunch == 1)
+            {
+                _animator.SetTrigger("punch_double");
+                _currentPunchTime = _punchCooldown;
+            } else if (_nPunch == 2)
+            {
+                _animator.SetTrigger("kick_triple"); 
+                _currentPunchTime = -1;
+                _nPunch = 0; 
+            }
+        } else 
+        {
+            _nPunch = 0;
+            _animator.SetTrigger("punch_single");
+            _currentPunchTime = _punchCooldown;
+        }
     }
 
     private CheckPoint _currentCheckPoint;
