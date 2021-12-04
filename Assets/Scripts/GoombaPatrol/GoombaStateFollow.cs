@@ -16,7 +16,7 @@ public class GoombaStateFollow : MonoBehaviour
         _navMesh.destination = _target.position;
     }
 
-    public void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {

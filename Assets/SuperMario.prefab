@@ -243,7 +243,7 @@ MonoBehaviour:
   _jumpKey: 32
   _height: 4
   _timeToMaxHeight: 0.7
-  _jumpCooldown: 4
+  _jumpCooldown: 2
   _cam: {fileID: 0}
   _moveSpeed: 4
   _runSpeed: 8
