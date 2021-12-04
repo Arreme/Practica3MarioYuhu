@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.6197082, g: 0.9216259, b: 0.97588295, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1693,5 +1693,13 @@ PrefabInstance:
       propertyPath: _cam
       value: 
       objectReference: {fileID: 963194227}
+    - target: {fileID: 8123290831514205660, guid: bdc9bfd0f3663be4a9cf22b0bb477506, type: 3}
+      propertyPath: _punchKey
+      value: 323
+      objectReference: {fileID: 0}
+    - target: {fileID: 8123290831514205660, guid: bdc9bfd0f3663be4a9cf22b0bb477506, type: 3}
+      propertyPath: _punchCooldown
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bdc9bfd0f3663be4a9cf22b0bb477506, type: 3}
