@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(CharacterController))]
@@ -20,7 +21,6 @@ public class MarioPlayerController : MonoBehaviour
     [SerializeField] private float _rSmoothTime;
 
     [Header("Jump")]
-    [SerializeField] private KeyCode _jumpKey;
     private float _vSpeed = 0;
     private float _startingGravity;
     [SerializeField] private float _height;
@@ -36,6 +36,8 @@ public class MarioPlayerController : MonoBehaviour
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _runSpeed;
     [SerializeField] float smoothMoveTime = 0.5f;
+    bool running = false;
+    bool leftControl = false;
     private Vector3 _speed;
     private Vector3 smoothV;
     private int _specialIdleTime = 5;
@@ -43,12 +45,9 @@ public class MarioPlayerController : MonoBehaviour
     private bool _resetGame;
 
     [Header("Punch")]
-    [SerializeField] private KeyCode _punchKey;
     [SerializeField] private float _punchCooldown;
     private float _currentPunchTime;
     private int _nPunch;
-
-
     void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -68,13 +67,29 @@ public class MarioPlayerController : MonoBehaviour
         _currentJumpTime -= Time.deltaTime;
         _currentSpecialIdleTime -= Time.deltaTime;
         _currentPunchTime -= Time.deltaTime;
-
-        if (Input.GetKeyDown(_jumpKey) && _grounded)
+        bool jumping = false;
+        if (Gamepad.current != null)
+        {
+            jumping = Gamepad.current.buttonNorth.wasPressedThisFrame;
+        } else
+        {
+            jumping = Keyboard.current.spaceKey.wasPressedThisFrame;
+        }
+        if (jumping && _grounded)
         {
             Jump();
             _currentSpecialIdleTime = _specialIdleTime;
         }
-        if (Input.GetKeyDown(_punchKey) && !Input.GetKey(KeyCode.LeftControl))
+        bool hitting = false;
+        if (Gamepad.current != null)
+        {
+            hitting = Gamepad.current.buttonSouth.wasPressedThisFrame;
+        }
+        else
+        {
+            hitting = Mouse.current.leftButton.wasPressedThisFrame;
+        }
+        if (hitting && !leftControl)
         {
             Punch();
             _currentSpecialIdleTime = _specialIdleTime;
@@ -85,11 +100,19 @@ public class MarioPlayerController : MonoBehaviour
     void FixedUpdate()
     {
         _currRotation = new Vector3(transform.forward.x, 0, transform.forward.z);
-        Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        Vector2 input = Vector2.zero;
+        if (Gamepad.current != null)
+        {
+            input = new Vector2(Gamepad.current.leftStick.x.ReadValue(), Gamepad.current.leftStick.y.ReadValue());
+            
+        } else
+        {
+            input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        }
         if (input != Vector2.zero)
             _currentSpecialIdleTime = _specialIdleTime;
         Vector3 inputDir = new Vector3(input.x, 0, input.y).normalized;
-        Vector3 worldInputDir = _cam.transform.TransformDirection(inputDir).normalized;
+        Vector3 worldInputDir = Vector3.ProjectOnPlane(_cam.transform.TransformDirection(inputDir),Vector3.up).normalized;
 
         Vector3 _lookTargetDirection = new Vector3(worldInputDir.x, 0, worldInputDir.z).normalized;
         _currRotation = Vector3.SmoothDamp(_currRotation, _lookTargetDirection, ref _rSmoothV, _rSmoothTime);
@@ -97,9 +120,27 @@ public class MarioPlayerController : MonoBehaviour
         {
             transform.rotation = Quaternion.LookRotation(_currRotation, Vector3.up);
         }
+        running = false;
+        if (Gamepad.current != null)
+        {
+            running = Gamepad.current.buttonEast.isPressed;
+        }
+        else
+        {
+            running = Keyboard.current.leftShiftKey.isPressed;
+        }
+        float currentSpeed = running ? _runSpeed : _moveSpeed;
+        leftControl = false;
+        if (Gamepad.current != null)
+        {
+            leftControl = Gamepad.current.rightTrigger.isPressed;
+        }
+        else
+        {
+            leftControl = Keyboard.current.leftCommandKey.isPressed;
+        }
 
-        float currentSpeed = (Input.GetKey(KeyCode.LeftShift)) ? _runSpeed : _moveSpeed;
-        if (Input.GetKey(KeyCode.LeftControl))
+        if (leftControl)
         {
             currentSpeed *= 0.5f;
             _animator.SetBool("Crouch",true);
@@ -147,31 +188,36 @@ public class MarioPlayerController : MonoBehaviour
 
     private void Jump()
     {
-        if (_currentJumpTime > 0 && Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.LeftControl))
+
+        if (_currentJumpTime > 0 && running && !leftControl)
         {
             _nJump++;
             if (_nJump == 1)
             {
+                AudioManager._Instance.PlaySound((int)AudioManager.Audios.JUMP2);
                 _vSpeed = _jumpSpeed * 1.05f;
                 _gravity = _startingGravity;
                 _animator.SetTrigger("SecondJump");
                 _currentJumpTime = _jumpCooldown;
             } else if (_nJump == 2)
             {
+                AudioManager._Instance.PlaySound((int)AudioManager.Audios.JUMP3);
                 _vSpeed = _jumpSpeed * 1.15f;
                 _gravity = _startingGravity;
                 _animator.SetTrigger("TripleJump");
                 _currentJumpTime = -1;
                 _nJump = 0;
             }
-        } else if (Input.GetKey(KeyCode.LeftControl)) 
+        } else if (leftControl) 
         {
+            AudioManager._Instance.PlaySound((int)AudioManager.Audios.JUMP1);
             _nJump = 0;
             _vSpeed = _jumpSpeed;
             _gravity = _startingGravity;
             _animator.SetTrigger("FirstJump");
         } else
         {
+            AudioManager._Instance.PlaySound((int)AudioManager.Audios.JUMP1);
             _nJump = 0;
             _vSpeed = _jumpSpeed;
             _gravity = _startingGravity;
@@ -188,16 +234,19 @@ public class MarioPlayerController : MonoBehaviour
             _nPunch++; 
             if (_nPunch == 1)
             {
+                AudioManager._Instance.PlaySound((int)AudioManager.Audios.PUNCH2);
                 _animator.SetTrigger("punch_double");
                 _currentPunchTime = _punchCooldown;
             } else if (_nPunch == 2)
             {
+                AudioManager._Instance.PlaySound((int)AudioManager.Audios.KICK);
                 _animator.SetTrigger("kick_triple"); 
                 _currentPunchTime = -1;
                 _nPunch = 0; 
             }
         } else 
         {
+            AudioManager._Instance.PlaySound((int)AudioManager.Audios.PUNCH1);
             _nPunch = 0;
             _animator.SetTrigger("punch_single");
             _currentPunchTime = _punchCooldown;
@@ -207,7 +256,6 @@ public class MarioPlayerController : MonoBehaviour
     private CheckPoint _currentCheckPoint;
     public void setCheckPoint(CheckPoint checkpoint)
     {
-        Debug.Log(checkpoint.gameObject.transform);
         _currentCheckPoint = checkpoint;
     }
 

@@ -22,6 +22,7 @@ public class PlayerHealthSystem : MonoBehaviour, IHealthSystem
     {
         if (_isInvincible) return false;
         _currLife -= dmgAmmount;
+        _currLife = Mathf.Max(_currLife - dmgAmmount, 0);
         _healthChanged.Invoke(_currLife);
         StartCoroutine(InvTimeCoroutine());
         if (_currLife <= 0)
@@ -29,6 +30,9 @@ public class PlayerHealthSystem : MonoBehaviour, IHealthSystem
             _lives.Death();
             _currLife = _maxLife;
             _healthChanged.Invoke(_currLife);
+        } else
+        {
+            AudioManager._Instance.PlaySound((int)AudioManager.Audios.TAKEDMG);
         }
         return true;
     }
@@ -36,8 +40,9 @@ public class PlayerHealthSystem : MonoBehaviour, IHealthSystem
     public bool Heal(float healAmmount)
     {
         if (_currLife == _maxLife) return false;
+        AudioManager._Instance.PlaySound((int)AudioManager.Audios.GETHEALTH);
+        _currLife = Mathf.Min(_currLife + healAmmount, _maxLife);
         _healthChanged.Invoke(_currLife);
-        _currLife = Mathf.Min(_currLife+healAmmount,_maxLife);
         return true;
     }
 

@@ -37,7 +37,11 @@ public class GoombaStateFollow : MonoBehaviour
     public void DeathEvent(Collider other)
     {
         if (other.CompareTag("Player"))
+        {
             Destroy(gameObject);
+            AudioManager._Instance.PlaySound((int)AudioManager.Audios.GOOMBADEAD);
+        }
+            
     }
 
     private IEnumerator attackCooldown()

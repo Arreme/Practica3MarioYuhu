@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5843252645766260847}
   - component: {fileID: 5843252645767359151}
   - component: {fileID: 5843252645769360488}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: PowerStar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 5843252646243889343}
   - component: {fileID: 5843252646243889336}
   - component: {fileID: 5843252646243889337}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: StarObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}

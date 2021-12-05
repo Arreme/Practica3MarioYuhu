@@ -9,6 +9,7 @@ public class Coin : MonoBehaviour
     {
         if (score != null)
         {
+            AudioManager._Instance.PlaySound((int)AudioManager.Audios.GETCOIN);
             score.score();
         }
         Destroy(gameObject);

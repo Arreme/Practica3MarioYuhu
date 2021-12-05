@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
@@ -15,7 +16,6 @@ public class CameraController : MonoBehaviour
 	bool m_CursorLocked=true;
 	private float _idleTime = 5;
 	private float _currIdleTime;
-
 	[SerializeField] private float m_MinDistanceToLookAt;
 	[SerializeField] private float m_MaxDistanceToLookAt;
 	[SerializeField] private LayerMask _layers;
@@ -33,21 +33,18 @@ public class CameraController : MonoBehaviour
 	}
 	void LateUpdate()
 	{
-	
-#if UNITY_EDITOR
-		if(Input.GetKeyDown(m_DebugLockAngleKeyCode))
-			m_AngleLocked=!m_AngleLocked;
-		if(Input.GetKeyDown(m_DebugLockKeyCode))
-		{
-			if(Cursor.lockState==CursorLockMode.Locked)
-				Cursor.lockState=CursorLockMode.None;
-			else
-				Cursor.lockState=CursorLockMode.Locked;
-			m_CursorLocked=Cursor.lockState==CursorLockMode.Locked;
+		float l_MouseAxisX;
+		float l_MouseAxisY;
+		if (Gamepad.current == null)
+        {
+			l_MouseAxisX = Mouse.current.delta.x.ReadValue();
+			l_MouseAxisY = Mouse.current.delta.y.ReadValue();
+		} else
+        {
+			l_MouseAxisX = Gamepad.current.rightStick.x.ReadValue();
+			l_MouseAxisY = -Gamepad.current.rightStick.y.ReadValue();
 		}
-#endif
-        float l_MouseAxisX = Input.GetAxis("Mouse X");
-        float l_MouseAxisY = Input.GetAxis("Mouse Y");
+        
 
 
         Vector3 l_Direction = m_LookAt.position - transform.position;
@@ -79,7 +76,6 @@ public class CameraController : MonoBehaviour
 					l_Yaw += angle +360;
 				}
 			}
-			Debug.Log(l_Yaw);
 			_currIdleTime = _idleTime;
 			l_Yaw *= Mathf.Deg2Rad;
 			l_Pitch *= Mathf.Deg2Rad;

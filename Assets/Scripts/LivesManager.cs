@@ -21,10 +21,12 @@ public class LivesManager : MonoBehaviour
         _text.text = sData._marioLives.ToString();
         if (sData._marioLives < 0)
         {
+            AudioManager._Instance.PlaySound((int)AudioManager.Audios.BOWSERLAUGH);
             _controller.gameObject.SetActive(false);
             _deathScreen.SetActive(true);
         } else
         {
+            AudioManager._Instance.PlaySound((int)AudioManager.Audios.DIE);
             _controller.RestartGame();
         }
     }
