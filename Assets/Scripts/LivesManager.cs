@@ -26,7 +26,6 @@ public class LivesManager : MonoBehaviour
             _deathScreen.SetActive(true);
         } else
         {
-            AudioManager._Instance.PlaySound((int)AudioManager.Audios.DIE);
             _controller.RestartGame();
         }
     }

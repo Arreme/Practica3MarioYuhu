@@ -39,6 +39,7 @@ public class PlayerHealthSystem : MonoBehaviour, IHealthSystem
     private IEnumerator deathRoutine()
     {
         _anim.SetTrigger("Death");
+        AudioManager._Instance.PlaySound((int)AudioManager.Audios.DIE);
         yield return new WaitForSeconds(1.5f);
         _anim.SetTrigger("Reset");
         _lives.Death();

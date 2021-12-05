@@ -157,7 +157,7 @@ public class MarioPlayerController : MonoBehaviour
         }
         else
         {
-            leftControl = Keyboard.current.leftCommandKey.isPressed;
+            leftControl = Keyboard.current.leftCtrlKey.isPressed;
         }
 
         if (leftControl)
@@ -208,6 +208,10 @@ public class MarioPlayerController : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
+        if (hit.gameObject.CompareTag("Ball"))
+        {
+            GetComponent<PlayerHealthSystem>().GetHit(10);
+        }
         if (Mathf.Abs(Vector3.Dot(hit.normal, Vector3.down)) < 0.1)
         {
             
