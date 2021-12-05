@@ -30,6 +30,8 @@ public class MarioPlayerController : MonoBehaviour
     [SerializeField] private float _jumpCooldown;
     private float _currentJumpTime;
     private int _nJump;
+    private bool _canWallJump = false;
+    private Vector3 _jumpDirection = Vector3.zero;
 
     [Header("Movement")]
     [SerializeField] private Camera _cam;
@@ -77,11 +79,17 @@ public class MarioPlayerController : MonoBehaviour
         {
             jumping = Keyboard.current.spaceKey.wasPressedThisFrame;
         }
-        if (jumping && _grounded)
+
+        if (jumping && _canWallJump)
+        {
+            WallJump();
+        }
+        else if (jumping && _grounded)
         {
             Jump();
             _currentSpecialIdleTime = _specialIdleTime;
         }
+
         bool hitting = false;
         if (Gamepad.current != null)
         {
@@ -91,6 +99,7 @@ public class MarioPlayerController : MonoBehaviour
         {
             hitting = Mouse.current.leftButton.wasPressedThisFrame;
         }
+
         if (hitting && !leftControl && _canPunch)
         {
             Punch();
@@ -197,6 +206,24 @@ public class MarioPlayerController : MonoBehaviour
 
     }
 
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (Mathf.Abs(Vector3.Dot(hit.normal, Vector3.down)) < 0.1)
+        {
+            
+            _animator.SetBool("Wall", true);
+            _canWallJump = true;
+            _currRotation = hit.normal;
+            transform.rotation = Quaternion.LookRotation(_currRotation, Vector3.up);
+            _jumpDirection = hit.normal;
+            
+        } else
+        {
+            _canWallJump = false;
+            _animator.SetBool("Wall", false);
+        }
+    }
+
     private void Jump()
     {
 
@@ -273,6 +300,17 @@ public class MarioPlayerController : MonoBehaviour
     public void RestartGame()
     {
         _resetGame = true;
+    }
+
+    private void WallJump()
+    {
+        AudioManager._Instance.PlaySound((int)AudioManager.Audios.JUMP1);
+        _vSpeed = _jumpSpeed;
+        _gravity = _startingGravity;
+        _speed += _jumpDirection * 10;
+        _animator.SetBool("Wall", false);
+        _animator.SetTrigger("WallJump");
+        _canWallJump = false;
     }
 
     private void LateUpdate()

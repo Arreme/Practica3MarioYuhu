@@ -23,19 +23,27 @@ public class PlayerHealthSystem : MonoBehaviour, IHealthSystem
     {
         if (_isInvincible) return false;
         _currLife = Mathf.Max(_currLife - dmgAmmount, 0);
-        _anim.SetTrigger("");
         _healthChanged.Invoke(_currLife);
         StartCoroutine(InvTimeCoroutine());
         if (_currLife <= 0)
         {
-            _lives.Death();
-            _currLife = _maxLife;
-            _healthChanged.Invoke(_currLife);
+            StartCoroutine(deathRoutine());
         } else
         {
+            _anim.SetTrigger("Hit");
             AudioManager._Instance.PlaySound((int)AudioManager.Audios.TAKEDMG);
         }
         return true;
+    }
+
+    private IEnumerator deathRoutine()
+    {
+        _anim.SetTrigger("Death");
+        yield return new WaitForSeconds(1.5f);
+        _anim.SetTrigger("Reset");
+        _lives.Death();
+        _currLife = _maxLife;
+        _healthChanged.Invoke(_currLife);
     }
 
     public bool Heal(float healAmmount)

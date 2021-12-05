@@ -2417,6 +2417,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _punchDeactivator: {fileID: 1674214058}
+--- !u!95 &1981544595 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 3107912141513067482, guid: bdc9bfd0f3663be4a9cf22b0bb477506, type: 3}
+  m_PrefabInstance: {fileID: 3107912141406154126}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2056127679
 GameObject:
   m_ObjectHideFlags: 0
@@ -2758,6 +2763,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SuperMario
       objectReference: {fileID: 0}
+    - target: {fileID: 3107912141522598329, guid: bdc9bfd0f3663be4a9cf22b0bb477506, type: 3}
+      propertyPath: _anim
+      value: 
+      objectReference: {fileID: 1981544595}
     - target: {fileID: 3107912141522598329, guid: bdc9bfd0f3663be4a9cf22b0bb477506, type: 3}
       propertyPath: _lives
       value: 
