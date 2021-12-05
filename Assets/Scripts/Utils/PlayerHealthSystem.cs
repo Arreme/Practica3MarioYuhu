@@ -10,6 +10,8 @@ public class PlayerHealthSystem : MonoBehaviour, IHealthSystem
     [SerializeField] private float _invTime;
     private bool _isInvincible;
     [SerializeField] private GameObject _model;
+    [SerializeField] private LivesManager _lives;
+    
 
     [SerializeField] private UnityEvent<float> _healthChanged;
     private void Start()
@@ -18,12 +20,15 @@ public class PlayerHealthSystem : MonoBehaviour, IHealthSystem
     }
     public bool GetHit(float dmgAmmount)
     {
+        if (_isInvincible) return false;
         _currLife -= dmgAmmount;
         _healthChanged.Invoke(_currLife);
         StartCoroutine(InvTimeCoroutine());
         if (_currLife <= 0)
         {
-            //DEATH
+            _lives.Death();
+            _currLife = _maxLife;
+            _healthChanged.Invoke(_currLife);
         }
         return true;
     }
@@ -34,11 +39,6 @@ public class PlayerHealthSystem : MonoBehaviour, IHealthSystem
         _healthChanged.Invoke(_currLife);
         _currLife = Mathf.Min(_currLife+healAmmount,_maxLife);
         return true;
-    }
-
-    public bool isInvincible()
-    {
-        return _isInvincible;
     }
 
     private IEnumerator InvTimeCoroutine()

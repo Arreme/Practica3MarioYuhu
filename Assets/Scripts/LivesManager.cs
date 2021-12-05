@@ -7,6 +7,8 @@ public class LivesManager : MonoBehaviour
 {
     [SerializeField] private int _startingMarioLives;
     [SerializeField] private Text _text;
+    [SerializeField] private GameObject _deathScreen;
+    [SerializeField] private MarioPlayerController _controller;
     private void Awake()
     {
         sData._marioLives = _startingMarioLives;
@@ -16,13 +18,14 @@ public class LivesManager : MonoBehaviour
     public void Death()
     {
         sData._marioLives--;
-        _startingMarioLives.ToString();
+        _text.text = sData._marioLives.ToString();
         if (sData._marioLives < 0)
         {
-            //Game Over and Restart
+            _controller.gameObject.SetActive(false);
+            _deathScreen.SetActive(true);
         } else
         {
-            //Teleport to checkpoint
+            _controller.RestartGame();
         }
     }
 }

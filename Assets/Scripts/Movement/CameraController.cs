@@ -13,6 +13,8 @@ public class CameraController : MonoBehaviour
 	public KeyCode m_DebugLockKeyCode=KeyCode.O;
 	bool m_AngleLocked=false;
 	bool m_CursorLocked=true;
+	private float _idleTime = 5;
+	private float _currIdleTime;
 
 	[SerializeField] private float m_MinDistanceToLookAt;
 	[SerializeField] private float m_MaxDistanceToLookAt;
@@ -20,6 +22,7 @@ public class CameraController : MonoBehaviour
 
 	void Start()
 	{
+		_currIdleTime = _idleTime;
 		Cursor.lockState=CursorLockMode.Locked;
 		m_CursorLocked=true;
 	}
@@ -43,16 +46,16 @@ public class CameraController : MonoBehaviour
 			m_CursorLocked=Cursor.lockState==CursorLockMode.Locked;
 		}
 #endif
-
         float l_MouseAxisX = Input.GetAxis("Mouse X");
         float l_MouseAxisY = Input.GetAxis("Mouse Y");
+
 
         Vector3 l_Direction = m_LookAt.position - transform.position;
         float l_Distance = l_Direction.magnitude;
 
         Vector3 l_DesiredPosition = transform.position;
 
-		if(!m_AngleLocked && (l_MouseAxisX>0.01f || l_MouseAxisX<-0.01f || l_MouseAxisY>0.01f || l_MouseAxisY<-0.01f))
+		if((!m_AngleLocked && (l_MouseAxisX>0.01f || l_MouseAxisX<-0.01f || l_MouseAxisY>0.01f || l_MouseAxisY<-0.01f)) || _currIdleTime <= 0)
 		{
 			Vector3 l_EulerAngles=transform.eulerAngles;
 			float l_Yaw=(l_EulerAngles.y+180.0f);
@@ -65,6 +68,19 @@ public class CameraController : MonoBehaviour
 			l_Pitch += m_PitchRotationalSpeed * (-l_MouseAxisY);
 			l_Pitch = Mathf.Clamp(l_Pitch,m_MinPitch,m_MaxPitch);
 			//TODO: Update DesiredPosition
+			if (_currIdleTime <= 0)
+			{
+				float angle = Vector3.SignedAngle(Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized, m_LookAt.forward, Vector3.up);
+				if (l_Yaw >= 300)
+				{
+					l_Yaw += angle;
+				} else
+                {
+					l_Yaw += angle +360;
+				}
+			}
+			Debug.Log(l_Yaw);
+			_currIdleTime = _idleTime;
 			l_Yaw *= Mathf.Deg2Rad;
 			l_Pitch *= Mathf.Deg2Rad;
 			l_DesiredPosition = m_LookAt.position
@@ -72,7 +88,10 @@ public class CameraController : MonoBehaviour
 							   Mathf.Sin(l_Pitch) * l_Distance,
 							   Mathf.Cos(l_Yaw) * Mathf.Cos(l_Pitch) * l_Distance );
 			l_Direction = m_LookAt.position - l_DesiredPosition;
-		}
+		} else
+        {
+			_currIdleTime -= Time.deltaTime;
+        }
 		l_Direction/=l_Distance;
 
 		//TODO: Clamp between minDistance and maxDistance. Update desiredPosition.

@@ -207,12 +207,12 @@ public class MarioPlayerController : MonoBehaviour
     private CheckPoint _currentCheckPoint;
     public void setCheckPoint(CheckPoint checkpoint)
     {
+        Debug.Log(checkpoint.gameObject.transform);
         _currentCheckPoint = checkpoint;
     }
 
     public void RestartGame()
     {
-        //ResetGame
         _resetGame = true;
     }
 
@@ -223,6 +223,7 @@ public class MarioPlayerController : MonoBehaviour
             Transform tr = _currentCheckPoint.getCheckPointPos();
             transform.position = tr.position;
             transform.rotation = tr.rotation;
+            Physics.SyncTransforms();
             _resetGame = false;
         }
     }

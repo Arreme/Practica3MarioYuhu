@@ -29,10 +29,7 @@ public class GoombaStateFollow : MonoBehaviour
     {
         if (other.TryGetComponent(out PlayerHealthSystem _pHealth) && _canAttack)
         {
-            if (!_pHealth.isInvincible())
-            {
-                _pHealth.GetHit(_damageAmmount);
-            }
+            _pHealth.GetHit(_damageAmmount);
             StartCoroutine(attackCooldown());
         }
     }
