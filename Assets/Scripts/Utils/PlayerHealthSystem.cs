@@ -21,7 +21,6 @@ public class PlayerHealthSystem : MonoBehaviour, IHealthSystem
     public bool GetHit(float dmgAmmount)
     {
         if (_isInvincible) return false;
-        _currLife -= dmgAmmount;
         _currLife = Mathf.Max(_currLife - dmgAmmount, 0);
         _healthChanged.Invoke(_currLife);
         StartCoroutine(InvTimeCoroutine());

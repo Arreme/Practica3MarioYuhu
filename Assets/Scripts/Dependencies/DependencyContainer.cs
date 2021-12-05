@@ -19,9 +19,6 @@ public class DependencyContainer
         {
             if (dependencies.ContainsKey(typeof(T)))
             {
-                Debug.Log("There's already an object of type: " + typeof(T).ToString());
-                Debug.Log("Object 1: " + dependencies[typeof(T)].GetType().ToString());
-                Debug.Log("Object 2: " + obj.GetType().ToString());
                 dependencies.Remove(typeof(T));
             }
             dependencies.Add(typeof(T), obj);
