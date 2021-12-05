@@ -9,7 +9,7 @@ public class MarioHealth : MonoBehaviour
     [SerializeField] private Transform _shown;
     private Vector3 _pHidden;
     private Vector3 _pShown;
-    private bool _reportingHealth;
+    private float _uiCD = 0;
     private float _currentHealth = 1;
     private float _targetHealth = 1;
     private float i = 0;
@@ -21,8 +21,8 @@ public class MarioHealth : MonoBehaviour
     }
     private void Update()
     {
-
-        if (_reportingHealth)
+        _uiCD -= Time.deltaTime;
+        if (_uiCD >= 0)
         {
             i += Time.deltaTime * 2;
             i = Mathf.Min(i, 1);
@@ -36,16 +36,10 @@ public class MarioHealth : MonoBehaviour
         transform.position = Vector3.Lerp(_pHidden, _pShown, i);
 
     }
+
     public void OnHealthChange(float health)
     {
         _targetHealth = health/80;
-        StartCoroutine(healthDelay());
-    }
-
-    private IEnumerator healthDelay()
-    {
-        _reportingHealth = true;
-        yield return new WaitForSeconds(3f);
-        _reportingHealth = false;
+        _uiCD = 2.5f;
     }
 }

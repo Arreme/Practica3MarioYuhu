@@ -166,6 +166,7 @@ GameObject:
   - component: {fileID: 8123290831514205659}
   - component: {fileID: 8123290831514205660}
   - component: {fileID: 8123290831063890527}
+  - component: {fileID: 8123290831218077290}
   m_Layer: 3
   m_Name: SuperMario
   m_TagString: Player
@@ -222,7 +223,7 @@ CharacterController:
   m_Height: 1.4
   m_Radius: 0.35
   m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_StepOffset: 0.75
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.78, z: 0}
@@ -248,6 +249,8 @@ MonoBehaviour:
   _moveSpeed: 4
   _runSpeed: 8
   smoothMoveTime: 0.1
+  _punchKey: 0
+  _punchCooldown: 0
 --- !u!114 &8123290831063890527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,6 +266,35 @@ MonoBehaviour:
   _maxLife: 80
   _invTime: 2
   _model: {fileID: 8123290830662890978}
+  _healthChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: MarioHealth, Assembly-CSharp
+        m_MethodName: OnHealthChange
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &8123290831218077290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8123290831063890526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8315d8cb4c4e2644940768eeda7b903, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bridgeRB: {fileID: 0}
+  bridgeForce: 10
 --- !u!1 &8123290831063890816
 GameObject:
   m_ObjectHideFlags: 0
