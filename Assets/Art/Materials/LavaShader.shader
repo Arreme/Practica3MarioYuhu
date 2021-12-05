@@ -26,7 +26,6 @@ Shader "Custom/LavaShader"
             struct appdata
             {
                 float4 vertex : POSITION;
-                float3 normals : NORMAL;
                 float2 uv : TEXCOORD0;
             };
 
@@ -43,17 +42,13 @@ Shader "Custom/LavaShader"
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                UNITY_TRANSFER_FOG(o,o.vertex);
+                o.uv = (v.uv + _Time.x) * _Scale;
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                // sample the texture
-                fixed4 col = tex2D(_MainTex, i.uv);
-                // apply fog
-                UNITY_APPLY_FOG(i.fogCoord, col);
+                fixed4 col = tex2D(_MainTex, i.uv) + _Color;
                 return col;
             }
             ENDCG
