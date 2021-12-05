@@ -235,12 +235,12 @@ public class MarioPlayerController : MonoBehaviour
             if (_nPunch == 1)
             {
                 AudioManager._Instance.PlaySound((int)AudioManager.Audios.PUNCH2);
-                _animator.SetTrigger("punch_double");
+                _animator.SetTrigger("SecondPunch");
                 _currentPunchTime = _punchCooldown;
             } else if (_nPunch == 2)
             {
                 AudioManager._Instance.PlaySound((int)AudioManager.Audios.KICK);
-                _animator.SetTrigger("kick_triple"); 
+                _animator.SetTrigger("ThirdPunch"); 
                 _currentPunchTime = -1;
                 _nPunch = 0; 
             }
@@ -248,7 +248,7 @@ public class MarioPlayerController : MonoBehaviour
         {
             AudioManager._Instance.PlaySound((int)AudioManager.Audios.PUNCH1);
             _nPunch = 0;
-            _animator.SetTrigger("punch_single");
+            _animator.SetTrigger("FirstPunch");
             _currentPunchTime = _punchCooldown;
         }
     }
