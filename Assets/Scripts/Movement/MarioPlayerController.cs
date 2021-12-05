@@ -48,6 +48,8 @@ public class MarioPlayerController : MonoBehaviour
     [SerializeField] private float _punchCooldown;
     private float _currentPunchTime;
     private int _nPunch;
+    private bool _canPunch = true;
+    [SerializeField] private Collider _punchCol;
     void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -89,12 +91,21 @@ public class MarioPlayerController : MonoBehaviour
         {
             hitting = Mouse.current.leftButton.wasPressedThisFrame;
         }
-        if (hitting && !leftControl)
+        if (hitting && !leftControl && _canPunch)
         {
             Punch();
+            StartCoroutine(punchCD());
+            _punchCol.enabled = true;
             _currentSpecialIdleTime = _specialIdleTime;
         }
         
+    }
+
+    private IEnumerator punchCD()
+    {
+        _canPunch = false;
+        yield return new WaitForSeconds(0.4f);
+        _canPunch = true;
     }
 
     void FixedUpdate()

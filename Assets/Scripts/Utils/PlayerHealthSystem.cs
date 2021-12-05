@@ -11,6 +11,7 @@ public class PlayerHealthSystem : MonoBehaviour, IHealthSystem
     private bool _isInvincible;
     [SerializeField] private GameObject _model;
     [SerializeField] private LivesManager _lives;
+    [SerializeField] private Animator _anim;
     
 
     [SerializeField] private UnityEvent<float> _healthChanged;
@@ -22,6 +23,7 @@ public class PlayerHealthSystem : MonoBehaviour, IHealthSystem
     {
         if (_isInvincible) return false;
         _currLife = Mathf.Max(_currLife - dmgAmmount, 0);
+        _anim.SetTrigger("");
         _healthChanged.Invoke(_currLife);
         StartCoroutine(InvTimeCoroutine());
         if (_currLife <= 0)

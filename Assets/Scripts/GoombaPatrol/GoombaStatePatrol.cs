@@ -31,7 +31,7 @@ public class GoombaStatePatrol : MonoBehaviour
         if (_currTarget == _tr.Length) _currTarget = 0;
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void GoombaFollow_EnterEvent(Collider other)
     {
         if (other.CompareTag("Player"))
         {
